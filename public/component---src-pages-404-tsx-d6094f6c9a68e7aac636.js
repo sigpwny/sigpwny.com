@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunksigpwny_com=self.webpackChunksigpwny_com||[]).push([[218],{2513:function(e,n,l){l.r(n);var a=l(7294);n.default=()=>a.createElement(a.Fragment,null,a.createElement("h1",null,"404 Error"),a.createElement("p",null,"Whoops, we couldn't find that page. Here's your flag:"),a.createElement("p",null,"sigpwny{4f4adcbf8c6f66dcfc8a3282ac2bf10a}"))}}]);
+//# sourceMappingURL=component---src-pages-404-tsx-d6094f6c9a68e7aac636.js.map
