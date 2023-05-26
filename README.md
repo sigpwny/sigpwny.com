@@ -1,38 +1,34 @@
-# sigpwny.com
+This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-The new SIGPwny website, built with Gatsby.
+## Getting Started
 
-## Content Types
+First, run the development server:
 
-This site defines multiple content types that allow for customization, flexibility, and ease of use. For more information, see the [content README](./content/README.md).
-
-## Installing and Building
-
-Clean install all node packages:
-```
-npm ci
-```
-
-Install `gatsby-cli`:
-```
-npm install -g gatsby-cli
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
 ```
 
-Build production and serve:
-```
-gatsby build
-gatsby serve
-```
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-Start a development server:
-```
-gatsby develop
-```
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-## Updating Dependencies
+This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
-This site only depends on official Gatsby plugins, so unless a plugin becomes deprecated, the latest versions of Gatsby and its plugins are pretty much guaranteed to work with each other. Ensure that breaking changes are addressed when dealing with major semver updates. Do not commit dependency updates without first verifying that the site built successfully and still operates normally.
+## Learn More
 
-```
-npm update
-```
+To learn more about Next.js, take a look at the following resources:
+
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+
+## Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.

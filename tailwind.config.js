@@ -1,6 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
+    "./src/app/**/*.{js,jsx,ts,tsx,md,mdx}",
     "./src/pages/**/*.{js,jsx,ts,tsx,md,mdx}",
     "./src/components/**/*.{js,jsx,ts,tsx,md,mdx}",
     "./src/templates/**/*.{js,jsx,ts,tsx}",
@@ -18,9 +19,6 @@ module.exports = {
         transparent: "transparent",
       },
     },
-    container: {
-      center: true,
-    },
     fontFamily: {
       mono: [
         "Consolas",
@@ -35,5 +33,5 @@ module.exports = {
       ],
     },
   },
-  plugins: [require("@tailwindcss/line-clamp")],
+  plugins: [],
 };

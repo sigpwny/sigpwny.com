@@ -42,6 +42,8 @@ if (highlighted == true) {
 }
 ```
 
+![Markdown image syntax doesn't work :(, at least not without hacks](./image.png)
+
 Here is an unordered list:
 - Item A
 	- Subitem 1
