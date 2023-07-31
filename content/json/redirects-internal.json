@@ -43,6 +43,10 @@
     "code": 302
   },
   {
+    "src": "/logo",
+    "dst": "/branding/"
+  },
+  {
     "src": "/meeting",
     "dst": "/meetings/"
   },

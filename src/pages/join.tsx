@@ -40,7 +40,7 @@ const JoinPage = ({ data }: Props) => {
   const socials = data.site?.siteMetadata?.socialLinks
   const discord_link = socials?.find((social) => social?.name === "Discord")?.link || "https://sigpwny.com/discord"
   return (
-    <div className="2xl:px-40">
+    <div className="mx-auto 2xl:w-5/6">
       <section id="join-title" className="grid gap-x-8 lg:grid-cols-2 py-8">
         <div className="flex flex-col flex-grow pb-4 basis-1/2">
           <h1>Welcome to SIGPwny!</h1>

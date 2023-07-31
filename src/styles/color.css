@@ -1,0 +1,15 @@
+.palette-surface {
+  --color-surface-000: #000000;
+  --color-surface-050: #111111;
+  --color-surface-100: #222222;
+  --color-surface-150: #333333;
+  --color-surface-200: #444444;
+  --color-surface-250: #555555;
+  --color-surface-300: #666666;
+  --color-text: #ffffff;
+}
+
+.palette-green {
+  --color-primary: #33cc55;
+  --color-secondary: #00ff55;
+}

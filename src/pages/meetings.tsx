@@ -24,6 +24,35 @@ export function Head() {
   )
 }
 
+const MeetingInfo = () => (
+  <div className="flex flex-row mb-4">
+    <div className="border-l-4 border-l-primary p-4">
+      <p className="text-2xl font-bold">
+        Thursdays
+      </p>
+      <p>
+        6 PM - 7 PM
+      </p>
+    </div>
+    <div className="border-l-4 border-l-primary p-4">
+      <p className="text-2xl font-bold">
+        Sundays
+      </p>
+      <p>
+        2 PM - 3 PM
+      </p>
+    </div>
+    <div className="border-l-4 border-l-primary p-4">
+      <p className="text-2xl font-bold">
+        Office Hours
+      </p>
+      <p>
+        6 PM
+      </p>
+    </div>
+  </div>
+)
+
 const MeetingRow = ({ meeting }: { meeting: Meeting }) => {
   const profiles = meeting.credit_profiles.map((profile, idx) => {
     if (profile) return profile
@@ -109,7 +138,9 @@ const MeetingsPage = ({ data }: Props) => {
   return (
     <section id="meetings" className="pb-8">
       <div className="flex flex-col mx-auto 2xl:w-5/6">
-        <h1>Meetings</h1>
+        <h1>Upcoming Meetings</h1>
+        <MeetingInfo />
+        <h1>All Meetings</h1>
         <div className="panel">
           {Object.entries(meetingsBySemester).map(([semester, meetings]) => (
             <div key={semester} id={semester}>
@@ -139,7 +170,7 @@ const MeetingsPage = ({ data }: Props) => {
             />
             <Tooltip
               anchorSelect=".link-tooltip-select"
-              className="!px-3 !py-2 !transition-none !bg-surface-250 !shadow-2xl !rounded-xl"
+              className="!px-3 !py-1 !transition-none !bg-surface-250 !shadow-2xl !rounded-xl"
               border={"2px solid var(--color-surface-300"}
               opacity={1}
             />
