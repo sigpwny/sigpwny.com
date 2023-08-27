@@ -79,6 +79,9 @@ a:hover {
 .page-width {
   @apply xl:w-2/3 lg:w-4/5;
 }
+.page-width-lg {
+  @apply 2xl:w-5/6;
+}
 .font-size-small {
   font-size: var(--font-size-small);
 }
@@ -129,6 +132,9 @@ a:hover {
 .btn-primary:hover {
   background-color: var(--color-secondary);
   color: var(--color-surface-000);
+}
+.button {
+  @apply flex flex-row items-center gap-1 px-3 py-1 cursor-pointer rounded-md;
 }
 /* fancy navbar toggle on mobile */
 .icon-bar {

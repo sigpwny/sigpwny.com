@@ -15,6 +15,7 @@ interface Field {
   name: string;
   required?: boolean;
   fields?: Field[];
+  resolve?: (ResolverParams) => any;
 };
 
 interface ResolverParams {
@@ -26,10 +27,6 @@ interface ContentNode {
   type: string;
   gatsbySourceInstanceName: string;
   fields?: Field[];
-  computedFields?: {
-    name: string;
-    resolve: (ResolverParams) => any;
-  }[];
 };
 
 // https://github.com/react-pdf-viewer/react-pdf-viewer/issues/497#issuecomment-812905172
@@ -59,10 +56,35 @@ function createSlug(base_dir: string, file_node: any, slug?: string) {
   if (!slug) {
     const parsed_path = path.parse(file_node.relativePath);
     if (parsed_path.name === "index") slug = `${base_dir}${parsed_path.dir}/`;
-    else slug = `${base_dir}${path.join(parsed_path.dir, parsed_path.name)}`;
+    else slug = `${base_dir}${path.posix.join(parsed_path.dir, parsed_path.name)}`;
   }
   return slug;
 }
+
+const field_resolvers_card_image: Field[] = [
+  { name: "foreground" },
+  { name: "background" },
+  {
+    name: "foreground_image",
+    resolve: ({ node }) => {
+      if (!node.frontmatter.card_image?.foreground?.endsWith(".svg")) {
+        return node.frontmatter.card_image?.foreground;
+      }
+      return undefined;
+    }
+  },
+  {
+    name: "background_image",
+    resolve: ({ node }) => {
+      if (!node.frontmatter.card_image?.background?.endsWith(".svg")) {
+        return node.frontmatter.card_image?.background;
+      }
+      return undefined;
+    }
+  },
+  { name: "background_color" },
+  { name: "alt" },
+];
 
 const content_node_types: ContentNode[] = [
   {
@@ -73,7 +95,10 @@ const content_node_types: ContentNode[] = [
       { name: "ical" },
       { name: "time_start", required: true },
       { name: "week_number", required: true },
-      { name: "credit", required: true },
+      {
+        name: "credit",
+        resolve: ({ node }) => node.frontmatter.credit ?? ["SIGPwny"]
+      },
       { name: "featured" },
       { name: "location" },
       { name: "description" },
@@ -85,12 +110,11 @@ const content_node_types: ContentNode[] = [
           { name: "alt", required: true },
         ],
       },
+      { name: "live_video_url" },
       { name: "slides" },
       { name: "recording" },
       { name: "assets" },
       { name: "tags" },
-    ],
-    computedFields: [
       {
         name: "semester",
         resolve: ({ node, file_node }) => {
@@ -136,29 +160,16 @@ const content_node_types: ContentNode[] = [
       { name: "ical" },
       { name: "time_start", required: true },
       { name: "series", required: true },
-      { name: "credit", required: true },
+      {
+        name: "credit",
+        resolve: ({ node }) => node.frontmatter.credit ?? ["SIGPwny"]
+      },
+      { name: "sponsors" },
       { name: "location" },
       { name: "description", required: true },
-      {
-        name: "overlay_image",
-        required: false,
-        fields: [
-          { name: "path", required: true },
-          { name: "alt", required: true },
-        ],
-      },
-      {
-        name: "background_image",
-        required: false,
-        fields: [
-          { name: "path", required: true },
-          { name: "alt", required: true },
-        ],
-      },
+      { name: "card_image", fields: field_resolvers_card_image },
       { name: "links" },
       { name: "stats" },
-    ],
-    computedFields: [
       {
         name: "slug",
         resolve: ({ file_node }) => createSlug("/events/", file_node),
@@ -193,27 +204,14 @@ const content_node_types: ContentNode[] = [
       { name: "publisher" },
       { name: "date", required: true },
       { name: "description" },
-      {
-        name: "image",
-        required: true,
-        fields: [
-          { name: "path", required: true },
-          { name: "alt", required: true },
-        ],
-      },
+      { name: "card_image", fields: field_resolvers_card_image },
       { name: "primary_link" },
-      { name: "other_links" },
+      { name: "links" },
       { name: "tags" },
-    ],
-    computedFields: [
       {
         name: "slug",
         resolve: ({ node, file_node }) =>
           createSlug("/publications/", file_node, node.frontmatter.slug),
-      },
-      {
-        name: "timezone",
-        resolve: ({ node }) => node.frontmatter.timezone ?? config.siteMetadata?.timezone ?? "Etc/UTC"
       },
     ],
   },
@@ -227,8 +225,6 @@ const content_node_types: ContentNode[] = [
         name: "options",
         fields: [{ name: "full_width" }, { name: "no_background" }],
       },
-    ],
-    computedFields: [
       {
         name: "slug",
         resolve: ({ node, file_node }) =>
@@ -244,9 +240,6 @@ const content_node_types: ContentNode[] = [
       { name: "profile_image", required: true },
       { name: "handle" },
       { name: "bio" },
-      { name: "links" },
-    ],
-    computedFields: [
       {
         name: "role",
         resolve: ({ node }) => node.frontmatter.role ?? "Admin"
@@ -255,27 +248,7 @@ const content_node_types: ContentNode[] = [
         name: "weight",
         resolve: ({ node }) => node.frontmatter.weight ?? 0
       },
-    ],
-  },
-  {
-    type: "Helper",
-    gatsbySourceInstanceName: "helpers",
-    fields: [
-      { name: "name", required: true },
-      { name: "profile_image", required: true },
-      { name: "handle" },
-      { name: "bio" },
       { name: "links" },
-    ],
-    computedFields: [
-      {
-        name: "role",
-        resolve: ({ node }) => node.frontmatter.role ?? "Helper"
-      },
-      {
-        name: "weight",
-        resolve: ({ node }) => node.frontmatter.weight ?? 0
-      },
     ],
   },
   {
@@ -288,9 +261,6 @@ const content_node_types: ContentNode[] = [
       { name: "period" },
       { name: "work" },
       { name: "bio" },
-      { name: "links" },
-    ],
-    computedFields: [
       {
         name: "role",
         resolve: ({ node }) => node.frontmatter.role ?? "Alum"
@@ -299,6 +269,26 @@ const content_node_types: ContentNode[] = [
         name: "weight",
         resolve: ({ node }) => node.frontmatter.weight ?? 0
       },
+      { name: "links" },
+    ],
+  },
+  {
+    type: "Helper",
+    gatsbySourceInstanceName: "helpers",
+    fields: [
+      { name: "name", required: true },
+      { name: "profile_image", required: true },
+      { name: "handle" },
+      { name: "bio" },
+      {
+        name: "role",
+        resolve: ({ node }) => node.frontmatter.role ?? "Helper"
+      },
+      {
+        name: "weight",
+        resolve: ({ node }) => node.frontmatter.weight ?? 0
+      },
+      { name: "links" },
     ],
   },
   {
@@ -309,9 +299,6 @@ const content_node_types: ContentNode[] = [
       { name: "profile_image", required: true },
       { name: "handle" },
       { name: "bio" },
-      { name: "links" },
-    ],
-    computedFields: [
       {
         name: "role",
         resolve: ({ node }) => node.frontmatter.role ?? "Member"
@@ -320,9 +307,71 @@ const content_node_types: ContentNode[] = [
         name: "weight",
         resolve: ({ node }) => node.frontmatter.weight ?? 0
       },
+      { name: "links" },
+    ],
+  },
+  {
+    type: "Org",
+    gatsbySourceInstanceName: "orgs",
+    fields: [
+      { name: "name", required: true },
+      { name: "profile_image", required: true },
+      { name: "card_image", fields: field_resolvers_card_image },
+      { name: "affiliation" },
+      { name: "handle" },
+      { name: "bio" },
+      {
+        name: "role",
+        resolve: ({ node }) => node.frontmatter.role ?? "Organization"
+      },
+      {
+        name: "weight",
+        resolve: ({ node }) => node.frontmatter.weight ?? 0
+      },
+      { name: "links" },
     ],
   },
 ];
+
+// Recursively check for required fields and run resolvers
+const resolveFields = (
+  fields: Field[],
+  iter_node: any,
+  orig: ResolverParams,
+  prev_field_name: string
+) => {
+  const resolved_fields = {};
+  fields.forEach((field) => {
+    const field_name = prev_field_name ?
+      `${prev_field_name}.${field.name}` :
+      field.name;
+    if (field.required && (
+      !(field.name in iter_node) ||
+      iter_node[field.name] === null ||
+      iter_node[field.name] === undefined ||
+      iter_node[field.name] === ""
+    )) {
+      throw new Error(
+        `Required field "${field_name}" is missing for ${orig.file_node.absolutePath}`
+      );
+    }
+    // Recursive step
+    if (field.fields && field.name in iter_node) {
+      resolved_fields[field.name] = resolveFields(
+        field.fields,
+        iter_node[field.name],
+        orig,
+        field_name
+      );
+    // Run resolver
+    } else if (field.resolve) {
+      resolved_fields[field.name] = field.resolve(orig);
+    } else {
+      resolved_fields[field.name] = iter_node[field.name];
+    }
+  });
+  return resolved_fields;
+};
 
 exports.onCreateNode = ({
   node,
@@ -343,37 +392,12 @@ exports.onCreateNode = ({
       (node) => node.gatsbySourceInstanceName === sourceInstanceName
     );
     if (!content_node_type) return;
-    const { type, fields, computedFields } = content_node_type;
+    const { type, fields } = content_node_type;
 
-    // Recursively check for required fields
-    const checkRequiredFields = (
-      fields: Field[],
-      node: any,
-      prev_field_name: string
-    ) => {
-      for (const field of fields) {
-        if (field.required) {
-          if (
-            node[field.name] === null ||
-            node[field.name] === undefined ||
-            node[field.name] === ""
-          ) {
-            throw new Error(
-              `"${prev_field_name}${field.name}" is required for ${file_node.absolutePath}`
-            );
-          }
-        }
-        if (field.fields && node[field.name])
-          checkRequiredFields(
-            field.fields,
-            node[field.name],
-            prev_field_name + field.name + "."
-          );
-      }
-    };
-
-    // Check MDX frontmatter
-    if (fields) checkRequiredFields(fields, node.frontmatter, "");
+    // Check required fields and run resolvers
+    const resolved_fields = fields ?
+      resolveFields(fields, node.frontmatter, { node, file_node }, "") :
+      undefined;
 
     // Create content node
     const content_node = {
@@ -385,18 +409,7 @@ exports.onCreateNode = ({
         content: JSON.stringify(node),
         contentDigest: createContentDigest(node),
       },
-      // Add fields defined in content node
-      ...(fields &&
-        fields.reduce((acc, field) => {
-          acc[field.name] = node.frontmatter[field.name];
-          return acc;
-        }, {})),
-      // Add fields that need to be resolved/computed
-      ...(computedFields &&
-        computedFields.reduce((acc, field) => {
-          acc[field.name] = field.resolve({ node, file_node });
-          return acc;
-        }, {})),
+      ...resolved_fields
     };
     createNode(content_node);
     createParentChildLink({ parent: node, child: content_node });
@@ -405,188 +418,8 @@ exports.onCreateNode = ({
 
 exports.createSchemaCustomization = ({ actions, schema }) => {
   const { createTypes } = actions;
-  createTypes(`
-    type Site implements Node {
-      siteMetadata: SiteMetadata!
-    }
-
-    type Link {
-      name: String!
-      link: String!
-    }
-
-    type SiteMetadata {
-      title: String!
-      siteUrl: String!
-      description: String!
-      image: String!
-      navLinks: [Link]
-      navCallToActionLinks: [Link]
-      socialLinks: [Link]
-      timezone: String!
-    }
-
-    type ImageAlt {
-      path: File! @fileByRelativePath
-      alt: String!
-    }
-
-    type Stat {
-      name: String!
-      value: String!
-    }
-
-    interface TemplatedPage implements Node @dontInfer {
-      id: ID!
-      slug: String!
-    }
-
-    type ICalendarEventData {
-      uid: String!
-      sequence: Int!
-      title: String!
-      description: String
-      location: ICalendarLocationData
-      url: String
-    }
-
-    type ICalendarLocationData {
-      title: String
-      address: String
-      radius: Float
-      geo: ICalendarGeoData
-    }
-
-    type ICalendarGeoData {
-      lat: Float!
-      lon: Float!
-    }
-
-    interface ICalendarEvent implements Node @dontInfer {
-      id: ID!
-      ical: ICalendarEventData!
-      time_start: Date! @dateformat
-      time_close: Date! @dateformat
-    }
-
-    type Meeting implements Node & TemplatedPage & ICalendarEvent @dontInfer {
-      title: String!
-      ical: ICalendarEventData!
-      time_start: Date! @dateformat
-      time_close: Date! @dateformat
-      week_number: Int!
-      credit: [String!]!
-      credit_profiles: [Profile]! @link(by: "name", from: "credit")
-      featured: Boolean
-      location: String
-      description: String
-      image: ImageAlt
-      slides: File @fileByRelativePath
-      recording: String
-      assets: [File] @fileByRelativePath
-      tags: [String!]
-      semester: String!
-      slug: String!
-      timezone: String!
-    }
-
-    type Event implements Node & TemplatedPage & ICalendarEvent @dontInfer {
-      title: String!
-      ical: ICalendarEventData!
-      time_start: Date! @dateformat
-      time_close: Date! @dateformat
-      series: String!
-      credit: [String!]!
-      credit_profiles: [Profile]! @link(by: "name", from: "credit")
-      location: String
-      description: String!
-      overlay_image: ImageAlt
-      background_image: ImageAlt
-      links: [Link]
-      stats: [Stat]
-      slug: String!
-      timezone: String!
-    }
-
-    type Publication implements Node & TemplatedPage @dontInfer {
-      title: String!
-      credit: [String!]!
-      publication_type: String!
-      publisher: String
-      date: Date! @dateformat
-      description: String
-      image: ImageAlt!
-      primary_link: String
-      other_links: [String]
-      tags: [String]
-      slug: String!
-      timezone: String!
-    }
-
-    type PageMarkdownOptions {
-      full_width: Boolean
-      no_background: Boolean
-    }
-
-    type PageMarkdown implements Node & TemplatedPage @dontInfer {
-      title: String!
-      description: String
-      options: PageMarkdownOptions
-      slug: String!
-    }
-
-    interface Profile {
-      name: String!
-      profile_image: File! @fileByRelativePath
-      handle: String
-      bio: String
-      links: [Link]
-      role: String!
-      weight: Int!
-    }
-
-    type Admin implements Node & Profile @dontInfer {
-      name: String!
-      profile_image: File! @fileByRelativePath
-      handle: String
-      bio: String
-      links: [Link]
-      role: String!
-      weight: Int!
-    }
-
-    type Helper implements Node & Profile @dontInfer {
-      name: String!
-      profile_image: File! @fileByRelativePath
-      handle: String
-      bio: String
-      links: [Link]
-      role: String!
-      weight: Int!
-    }
-
-    type Alum implements Node & Profile @dontInfer {
-      name: String!
-      profile_image: File! @fileByRelativePath
-      handle: String
-      period: String
-      work: String
-      bio: String
-      links: [Link]
-      role: String!
-      weight: Int!
-    }
-
-    type Member implements Node & Profile @dontInfer {
-      name: String!
-      profile_image: File! @fileByRelativePath
-      handle: String
-      bio: String
-      links: [Link]
-      role: String!
-      weight: Int!
-    }
-  `);
+  const sdl = fs.readFileSync("./gatsby-schema.graphql", "utf8");
+  createTypes(sdl);
 };
 
 exports.createResolvers = ({ createResolvers }) => {
@@ -706,14 +539,7 @@ exports.createPages = async ({ graphql, actions }) => {
           }
         }
       }
-      allRedirectsExternalJson {
-        redirects: nodes {
-          id
-          src
-          dst
-        }
-      }
-      allRedirectsInternalJson {
+      allRedirectsJson {
         redirects: nodes {
           id
           src
@@ -732,41 +558,35 @@ exports.createPages = async ({ graphql, actions }) => {
   const template_event = path.resolve(`./src/templates/template-event.tsx`);
   const template_publication = path.resolve(`./src/templates/template-publication.tsx`);
   const template_page_md = path.resolve(`./src/templates/template-page_md.tsx`);
-  const template_redirect_external = path.resolve(`./src/templates/template-redirect-external.tsx`);
+  // const template_redirect_client = path.resolve(`./src/templates/template-redirect-client.tsx`);
 
-  // Generate external redirects
-  const redirects_external = result.data.allRedirectsExternalJson.redirects;
-  if (redirects_external.length > 0) {
-    redirects_external.forEach((redirect) => {
-      createPage({
-        path: redirect.src,
-        component: template_redirect_external,
-        context: {
-          id: redirect.id,
-        },
-        trailingSlash: true,
-      });
-    });
-  }
-
-  // Generate internal redirects
-  const redirects_internal = result.data.allRedirectsInternalJson.redirects;
-  if (redirects_internal.length > 0) {
-    redirects_internal.forEach((redirect) => {
+  // Generate redirects
+  const redirects = result.data.allRedirectsJson.redirects;
+  if (redirects.length > 0) {
+    redirects.forEach((redirect) => {
+      // Generate client side redirect pages (in case server side redirects are not supported)
+      // createPage({
+      //   path: redirect.src,
+      //   component: template_redirect_client,
+      //   context: {
+      //     id: redirect.id,
+      //   },
+      //   trailingSlash: true,
+      // });
       // Generate server side redirects for internal routes
       createRedirect({
         fromPath: redirect.src.endsWith("/")
           ? redirect.src.slice(0, -1)
           : redirect.src,
         toPath: redirect.dst,
-        statusCode: redirect.code ? redirect.code : 301,
+        statusCode: redirect.code ?? 302,
       });
       createRedirect({
         fromPath: redirect.src.endsWith("/")
           ? redirect.src
           : redirect.src + "/",
         toPath: redirect.dst,
-        statusCode: redirect.code ? redirect.code : 301,
+        statusCode: redirect.code ?? 302,
       });
     });
   }
@@ -785,12 +605,12 @@ exports.createPages = async ({ graphql, actions }) => {
           createRedirect({
             fromPath: `${page.slug}slides`,
             toPath: page.slides.publicURL,
-            statusCode: 301,
+            statusCode: 302,
           });
           createRedirect({
             fromPath: `${page.slug}slides/`,
             toPath: page.slides.publicURL,
-            statusCode: 301,
+            statusCode: 302,
           });
         }
         break;

@@ -21,23 +21,25 @@ credit:
   - Pranav Goel
   - Sam Sharps
   - Thomas Quig
+sponsors:
+  - Leviathan Security Group
+  - REDLattice
 location: Online
-background_image:
-  path: acnh.jpg
-  alt: Animal Crossing New Horizons beach background
-overlay_image:
-  path: uiuctf-logo.png
-  alt: Board saying SIGPWNY presents UIUCTF
+card_image:
+  foreground: uiuctf-logo.png
+  background: acnh.jpg
 links:
   - name: website
-    link: https://2020.uiuc.tf/
+    url: https://2020.uiuc.tf/
   - name: ctftime
-    link: https://ctftime.org/event/1075
+    url: https://ctftime.org/event/1075
 stats:
   - name: Teams
     value: "390"
   - name: Rating Weight
     value: "23.76"
+  - name: Cash Prizes (USD)
+    value: "$4,500+"
 ---
 ## Information
 [Teaser trailer](https://youtu.be/1Rwc6tdyD18)
@@ -47,7 +49,7 @@ stats:
 For UIUCTF 2020 we paid out $1,600 in writeup prizes. We were inspired by GoogleCTF's writeup prizes. We prioritize concise technical communication and writeups that are fun to read and learn from, including those written from/for the perspective of beginners. Here are the writeups that won.
 
 | Challenge | Author |
-| :------- | ---: |
+| --------- | ------ |
 |[MuJS](https://ptr-yudai.hatenablog.com/entry/2020/07/20/153619#Pwn-MuJS) | ptr-yudai - zer0pts |
 |[MuJS](https://blog.pepsipu.com/posts/mujs-uiuctf) | pepsipu - DiceGang |
 |[MuJS](https://hackmd.io/@M30W/UIUCTF2020-MuJS-Writeup) | M30W - DiceGang |

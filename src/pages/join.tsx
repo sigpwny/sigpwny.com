@@ -38,7 +38,7 @@ const JoinPage = ({ data }: Props) => {
     createCard({meeting, timezone: meeting.timezone} as CardMeetingProps)
   ))
   const socials = data.site?.siteMetadata?.socialLinks
-  const discord_link = socials?.find((social) => social?.name === "Discord")?.link || "https://sigpwny.com/discord"
+  const discord_link = socials?.find((social) => social?.name === "Discord")?.url || "https://sigpwny.com/discord"
   return (
     <div className="mx-auto 2xl:w-5/6">
       <section id="join-title" className="grid gap-x-8 lg:grid-cols-2 py-8">
@@ -109,10 +109,12 @@ const JoinPage = ({ data }: Props) => {
       </section>
 
       <section id="join-leadership" className="py-8">
-        <h1>Leadership Opportunities</h1>
+        <h1>FAQ / Get Involved</h1>
         <p className="mt-4 mb-0">
-          TODO: talk about helper applications, our teams (marketing, infra,
-          etc.), and meeting presenting
+          Interested in learning more about the club? Want to get involved?
+
+          Check out our <Link to="/faq/">FAQ</Link> or reach out to a helper on
+          Discord!
         </p>
       </section>
     </div>
@@ -129,7 +131,7 @@ export const query = graphql`
         timezone
         socialLinks {
           name
-          link
+          url
         }
       }
     }

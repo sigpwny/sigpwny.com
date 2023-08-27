@@ -1,28 +1,28 @@
-import React from "react"
-import { Link, graphql } from "gatsby"
-import { Tooltip } from "react-tooltip"
-import dayjs from "dayjs"
+import React from "react";
+import { Link, graphql } from "gatsby";
 
-import { AvatarGroup, ProfileCard } from "../components/Profile"
-import Seo from "../components/Seo"
-import { TagGroup } from "../components/Tag"
-import { weekNumber, convertDate, formatSemester } from "../utils/util"
-import { PdfSvg, YouTubeSvg } from "../components/Icons"
+import Seo from "../components/Seo";
+import { AvatarGroup } from "../components/Profile";
+import { CountdownBadge } from "../components/Countdown";
+import { TagGroup } from "../components/Tag";
+import { Tooltip } from "../components/Tooltip";
+import { weekNumber, convertDate, formatSemester } from "../utils/util";
+import { PdfSvg, YouTubeSvg } from "../components/Icons";
 
-type Meeting = Queries.MeetingsPageQuery["allMeeting"]["meetings"][0]
+type Meeting = Queries.MeetingsPageQuery["allMeeting"]["nodes"][0];
 
 interface Props {
-  data: Queries.MeetingsPageQuery 
+  data: Queries.MeetingsPageQuery;
 }
 
-export function Head() {
+export const Head = () => {
   return (
     <Seo
       title="Meetings"
       description="Index of all SIGPwny meetings"
     />
-  )
-}
+  );
+};
 
 const MeetingInfo = () => (
   <div className="flex flex-row mb-4">
@@ -55,11 +55,11 @@ const MeetingInfo = () => (
 
 const MeetingRow = ({ meeting }: { meeting: Meeting }) => {
   const profiles = meeting.credit_profiles.map((profile, idx) => {
-    if (profile) return profile
+    if (profile) return profile;
     return {
       name: meeting.credit[idx]
-    }
-  })
+    };
+  });
   return (
     <li>
       <div className="flex flex-row px-2 py-1 -mx-2 gap-x-4 rounded-lg hover:bg-surface-200">
@@ -70,6 +70,7 @@ const MeetingRow = ({ meeting }: { meeting: Meeting }) => {
           >
             {convertDate(meeting.time_start, "YYYY-MM-DD", meeting.timezone)}
           </span>
+          <CountdownBadge time_start={meeting.time_start} time_close={meeting.time_close} />
           <Link to={`${meeting.slug}`} className="truncate">
             <span>
               <span className="font-mono">Week {weekNumber(meeting.week_number)}</span>: {meeting.title}
@@ -78,7 +79,7 @@ const MeetingRow = ({ meeting }: { meeting: Meeting }) => {
         </div>
         <div className="hidden lg:flex flex-row lg:flex-grow gap-x-4 truncate">
           {meeting.tags && meeting.tags.length > 0 && (
-            <TagGroup tags={meeting.tags} char_limit={25} tag_limit={3} />
+            <TagGroup tags={meeting.tags.concat()} char_limit={25} tag_limit={3} />
           )}
         </div>
         <div className="hidden md:flex flex-row gap-x-4 min-w-fit truncate">
@@ -111,33 +112,32 @@ const MeetingRow = ({ meeting }: { meeting: Meeting }) => {
             </div>
           </div>
           <AvatarGroup
-            profiles={profiles}
+            profiles={profiles as ProfileBasicProps[]}
             limit={3}
           />
         </div>
       </div>
       <hr className="border-surface-200" />
     </li>
-  )
-}
+  );
+};
 
 const MeetingsPage = ({ data }: Props) => {
-  const meetingsBySemester = data.allMeeting.meetings
-  .reduce(
+  const meetingsBySemester = data.allMeeting.nodes.reduce(
     (acc, meeting) => {
-      const semester = meeting.semester
-      if (!semester) return acc
+      const semester = meeting.semester;
+      if (!semester) return acc;
       if (acc[semester]) {
-        acc[semester].push(meeting)
+        acc[semester].push(meeting);
       } else {
-        acc[semester] = [meeting]
+        acc[semester] = [meeting];
       }
-      return acc
+      return acc;
     }, {} as {[semester: string]: Meeting[]
-  })
+  });
   return (
     <section id="meetings" className="pb-8">
-      <div className="flex flex-col mx-auto 2xl:w-5/6">
+      <div className="flex flex-col mx-auto page-width-lg">
         <h1>Upcoming Meetings</h1>
         <MeetingInfo />
         <h1>All Meetings</h1>
@@ -153,57 +153,27 @@ const MeetingsPage = ({ data }: Props) => {
               </ul>
             </div>
           ))}
-          <span className="tooltip-container">
-            <Tooltip
-              anchorSelect=".day-tooltip-select"
-              className="!px-2 !py-0 !transition-none !bg-surface-250 !shadow-2xl !rounded-xl font-mono hidden md:block"
-              border={"2px solid var(--color-surface-300"}
-              opacity={1}
-              place={"left"}
-            />
-            <Tooltip
-              anchorSelect=".tooltip-select"
-              className="!p-2 !transition-none !bg-surface-250 !shadow-2xl !rounded-xl"
-              border={"2px solid var(--color-surface-300"}
-              opacity={1}
-              clickable
-            />
-            <Tooltip
-              anchorSelect=".link-tooltip-select"
-              className="!px-3 !py-1 !transition-none !bg-surface-250 !shadow-2xl !rounded-xl"
-              border={"2px solid var(--color-surface-300"}
-              opacity={1}
-            />
-            <Tooltip
-              anchorSelect=".profile-tooltip-select"
-              className="!p-0 !transition-none !bg-transparent !shadow-2xl"
-              opacity={1}
-              place={"top-end"}
-              clickable
-              noArrow
-              render={({ content }) => {
-                if (!content) return null
-                const profile = JSON.parse(content)
-                return (
-                  <ProfileCard profile={profile} />
-                )
-              }}
-            />
+          <span>
+            <Tooltip.Day />
+            <Tooltip />
+            <Tooltip.Link />
+            <Tooltip.Profile />
           </span>
         </div>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default MeetingsPage
+export default MeetingsPage;
 
 export const query = graphql`
   query MeetingsPage {
     allMeeting(sort: {time_start: DESC}) {
-      meetings: nodes {
+      nodes {
         title
         time_start
+        time_close
         timezone
         week_number
         credit
@@ -217,7 +187,7 @@ export const query = graphql`
           handle
           links {
             name
-            link
+            url
           }
           role
         }
@@ -239,4 +209,4 @@ export const query = graphql`
       }
     }
   }
-`
+`;
