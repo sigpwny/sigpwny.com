@@ -119,8 +119,8 @@ const MeetingTemplate = ({ data, children }: Props) => {
                     }
                     &ndash;
                     {time_close.minute() == 0 ?
-                      <>{time_close.format("h A")}</> :
-                      <>{time_close.format("h:mm A")}</>
+                      <>{time_close.format("h A z")}</> :
+                      <>{time_close.format("h:mm A z")}</>
                     }
                   </time>
                 </span>
