@@ -42,7 +42,7 @@ export const Head = ({ data }: Props) => {
     <Seo
       title={meeting.title}
       description={meeting.semester + " Week " + weekNumber(meeting.week_number) +
-        " • " + convertDate(meeting.time_start, "MMMM DD, YYYY", meeting.timezone)
+        " • " + convertDate(meeting.time_start, "MMMM Do, YYYY", meeting.timezone)
       }
       image={meeting.image?.path ? (
         meeting.image.path.childImageSharp?.gatsbyImageData.images.fallback?.src
