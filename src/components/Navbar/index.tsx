@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from "react"
-import { Link, useStaticQuery, graphql } from "gatsby"
-import { Disclosure, Transition } from "@headlessui/react"
+import React, { useEffect, useState } from 'react';
+import { Link, useStaticQuery, graphql } from 'gatsby';
+import { Disclosure, Transition } from '@headlessui/react';
 
-import { PwnySvg } from "./Icons"
+import { PwnySvg } from '../Icons';
 
 interface NavLink {
-  name: string
-  url: string
-}
+  name: string;
+  url: string;
+};
 
-const Nav = () => {
+export default function Navbar() {
   const [counter, setCounter] = useState(0)
   const colors = [
     {primary: "#33cc55", secondary: "#137137"},
@@ -170,5 +170,3 @@ const Nav = () => {
     </>
   )
 }
-
-export default Nav

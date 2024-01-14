@@ -1,6 +1,6 @@
 import React from "react"
 
-import Nav from "../components/Nav"
+import Navbar from "../components/Navbar"
 import Footer from "../components/Footer"
 
 interface Props {
@@ -10,7 +10,7 @@ interface Props {
 const Layout = ({ children }: Props) => (
   <>
     <div className="flex flex-col min-h-screen">
-      <Nav />
+      <Navbar />
       <div className="container grow">
         {children}
       </div>

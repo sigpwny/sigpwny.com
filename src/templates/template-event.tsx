@@ -1,12 +1,12 @@
-import React from "react";
-import { graphql } from "gatsby";
+import React from 'react';
+import { graphql } from 'gatsby';
 
-import Seo from "../components/Seo";
-import { Card, createCard } from "../components/Card";
-import { MDXProvider } from "../components/MDXProvider";
-import { LocationRegular } from "../components/Icons/fluentui";
-import { OpenRegular } from "../components/Icons/fluentui";
-import { convertDate } from "../utils/util";
+import Seo from '@/components/Seo';
+import { Card, createCard } from '@/components/Card';
+import { MDXProvider } from '@/components/MDXProvider';
+import { LocationRegular } from '@/components/Icons/fluentui';
+import { OpenRegular } from '@/components/Icons/fluentui';
+import { convertDate } from '@/utils/util';
 
 interface Props {
   data: Queries.EventTemplateQuery
@@ -44,6 +44,62 @@ const EventTemplate = ({ data, children }: Props) => {
   const event = data.event;
   const sponsor_cards = event.sponsors_profiles?.map((sponsor) =>
     createCard({sponsor} as CardSponsorProps));
+  if (event.series === "fallctf") {
+    const years = [2024, 2023, 2022, 2021, 2020]
+    return (
+      <>
+        {/* <div className="flex flex-row rounded-xl bg-surface-100 border-2 border-surface-050 gap-2 p-2">
+          {years.map((year) => {
+            const active = event.title.includes(year.toString());
+            return (
+              <a
+                key={year}
+                href="#"
+                className={`rounded-lg hover:bg-surface-200 !text-text text-lg font-medium px-3 py-1 ${active ? "bg-surface-200" : ""}`}
+              >
+                {year}
+              </a>
+            );
+          })}
+        </div> */}
+        <div className="text-center">
+          <h1 className="text-9xl">
+            {event.title}
+          </h1>
+          <p>
+            {event.description}
+          </p>
+          <div className="flex flex-row justify-center">
+            <span className="font-medium text-7xl">
+              20 10 05 23
+            </span>
+          </div>
+          <div className="flex flex-row justify-center gap-2">
+            {event.links?.map((link, idx) => (
+              <a
+                key={idx}
+                href={link.url}
+                className="flex flex-row items-center btn-primary !px-4 !py-2"
+                target="_blank" rel="noopener noreferrer"
+              >
+                <span>
+                  {getLinkName(link.name)}
+                </span>
+                <OpenRegular className="flex-none ml-2" />
+              </a>
+            ))}
+          </div>
+        </div>
+        <section id="content" className="overflow-hidden">
+          <MDXProvider>
+            <div className="md-root">
+              {children}
+            </div>
+          </MDXProvider>
+        </section>
+      </>
+    );
+  }
   return (
     <div className="flex lg:flex-row flex-col gap-4">
       <aside className="flex shrink-0 xl:w-96 lg:w-80">
@@ -166,6 +222,7 @@ export const query = graphql`
   query EventTemplate($id: String!) {
     event: event(id: { eq: $id }) {
       title
+      series
       description
       time_start
       time_close

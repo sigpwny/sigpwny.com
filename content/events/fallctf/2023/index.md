@@ -3,9 +3,7 @@ title: Fall CTF 2023
 series: fallctf
 description: Fall CTF is a 6-hour hacking competition for UIUC students hosted
   by SIGPwny. UIUC students of all backgrounds are welcome, including beginners!
-  Work in teams of two on challenges related to web hacking, reverse
-  engineering, binary exploitation, and more! Plus, free food, free swag, and
-  companies! Come learn and have fun with us!
+  Learn about web hacking, reverse engineering, binary exploitation, and more!
 time_start: 2023-09-23T17:00:00.000Z
 time_close: 2023-09-23T23:00:00.000Z
 location: CIF 3039
@@ -13,6 +11,8 @@ card_image:
   background_color: "#000000"
   foreground: ""
   background: fallctf-23-event-page-graphic.png
+colors:
+  - { name: "primary", rgb: "00 00 00" }
 sponsors:
   - John Deere
   - Battelle
@@ -24,9 +24,78 @@ sponsors:
   - Hak5
   - Binary Ninja
 links:
+  - name: Pre-Register Now!
+    url: https://sigpwny.com/
+  - name: Create Account
+    url: https://sigpwny.com/
   - name: Play Challenges
     url: https://fallctf.sigpwny.com/
+    icon: play
 ---
+<div class="max-w-prose">
+
+  <div class="panel">
+
+  ## What is CTF?
+
+  Capture the Flag (CTF) is a **hacking competition** where players solve cybersecurity challenges in order to capture "flags." Players compete to capture the most flags.
+  </div>
+
+  <div class="panel">
+
+  ## What is Fall CTF?
+
+  Fall CTF is an introductory CTF designed to be as **beginner-friendly** as possible. 
+  </div>
+
+## When/Where
+
+## Things to Learn
+
+- Web Hacking (Web)
+- Open Source Intelligence (OSINT)
+- Hardware Hacking (Hardware/Badge)
+- Cryptography (Crypto)
+- Reverse Engineering (Rev)
+- Binary Exploitation (Pwn)
+- Miscellaneous (Misc)
+
+## [POST] Event Gallery
+See the gallery here
+
+## [PRE] Schedule
+
+## Divisions
+
+## [PRE] Prizes
+
+## Free Stuff and Goodies
+All registrants will get this stuff!
+### Hardware Hacking and Badge
+Introducing... the first Fall CTF hardware badge! Inspired by the GameBoy, the PwnyBoy is...
+
+## Sponsors
+TODO: Figure out how to show here
+
+## Rules
+
+## General FAQ
+- What is a CTF?
+- What if I'm not a computer science/engineering/... major? Do I need a programming background to participate?
+  - That's irrelevant. We mean it when we say that this CTF is beginner-friendly. If you aren't able to compete, you will at least learn something out of it.
+- Do I need to bring a laptop?
+- I heard that there will be companies present. Do I need to dress formally or prepare a resume?
+- Where can I find some example challenges?
+- Who can register? What if I am not a UIUC student?
+
+## During Competition FAQ:
+- How do I form a team?
+- How do I get help with a challenge?
+- How are tie-breakers determined?
+</div>
+
+<hr />
+
 ## Registration
 Registration for the CTF competition platform is now available!
 
