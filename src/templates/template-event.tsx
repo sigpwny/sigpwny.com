@@ -2,6 +2,7 @@ import React from 'react';
 import { graphql } from 'gatsby';
 
 import Seo from '@/components/Seo';
+import FloatingNavbar from '@/components/Navbar/FloatingNavbar';
 import { Card, createCard } from '@/components/Card';
 import { MDXProvider } from '@/components/MDXProvider';
 import { LocationRegular } from '@/components/Icons/fluentui';
@@ -90,11 +91,19 @@ const EventTemplate = ({ data, children }: Props) => {
             ))}
           </div>
         </div>
+        <FloatingNavbar
+          links={[
+            { name: "Info", url: "#info" },
+            { name: "Teams", url: "#teams" },
+            { name: "Scoreboard", url: "#scoreboard" },
+            { name: "Challenges", url: "#challenges" },
+          ]}
+        />
         <section id="content" className="overflow-hidden">
           <MDXProvider>
-            <div className="md-root">
+            {/* <div className="md-root"> */}
               {children}
-            </div>
+            {/* </div> */}
           </MDXProvider>
         </section>
       </>

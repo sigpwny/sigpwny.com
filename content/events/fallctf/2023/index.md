@@ -1,9 +1,7 @@
 ---
 title: Fall CTF 2023
 series: fallctf
-description: Fall CTF is a 6-hour hacking competition for UIUC students hosted
-  by SIGPwny. UIUC students of all backgrounds are welcome, including beginners!
-  Learn about web hacking, reverse engineering, binary exploitation, and more!
+description: Fall CTF is a 6-hour hacking competition for UIUC students.
 time_start: 2023-09-23T17:00:00.000Z
 time_close: 2023-09-23T23:00:00.000Z
 location: CIF 3039
